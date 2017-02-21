@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-
+#import "GSSettingVC.h"
 @interface AppDelegate ()
 
 @end
@@ -17,8 +17,27 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    self.window.rootViewController=[[UINavigationController alloc]initWithRootViewController:[GSSettingVC new]];
+    [self configNavigationBar];
     return YES;
 }
+
+-(void)configNavigationBar{
+    [[UINavigationBar appearance] setBarTintColor:ThemeColor];
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    
+    [[UINavigationBar appearance] setTitleTextAttributes:@{
+                                                           NSForegroundColorAttributeName : [UIColor whiteColor]
+                                                           }];
+    [[UINavigationBar appearance] setShadowImage:[UIImage new]];
+    [[UIBarButtonItem appearance]
+     setBackButtonTitlePositionAdjustment:UIOffsetMake(0, -60)
+     forBarMetrics:UIBarMetricsDefault];
+    [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];
+    [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];
+}
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
