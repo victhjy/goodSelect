@@ -17,9 +17,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor=RGBA(254, 215, 121, 0.6);
-    self.title=@"什么问题呢？";
-    
+    self.view.backgroundColor=[UIColor whiteColor];
     [self initUI];
     [self initTableView];
     // Do any additional setup after loading the view.
@@ -27,14 +25,9 @@
 
 -(void)initUI{
     self.segment=[[UISegmentedControl alloc]initWithItems:@[@"♀♂",@"###"]];
-    [self.view addSubview:self.segment];
-    [self.segment mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view).offset(74);
-        make.width.mas_equalTo(UIScreenWidth*2/3);
-        make.centerX.equalTo(self.view);
-        make.height.mas_equalTo(35);
-    }];
-    self.segment.tintColor = ThemeColor;
+    self.segment.frame=CGRectMake(0, 0, UIScreenWidth/3, 35);
+    self.segment.center=self.navigationController.navigationBar.center;
+    self.segment.tintColor = [UIColor appNavigationBarColor];
     NSDictionary* selectedTextAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:14],
                                              NSForegroundColorAttributeName: [UIColor whiteColor]};
     [self.segment setTitleTextAttributes:selectedTextAttributes forState:UIControlStateSelected];//设置文字属性
@@ -43,11 +36,12 @@
     [self.segment setTitleTextAttributes:unselectedTextAttributes forState:UIControlStateNormal];
     self.segment.selectedSegmentIndex=0;
     [self.segment addTarget:self action:@selector(switchedStatus:) forControlEvents:UIControlEventValueChanged];
+    self.navigationController.navigationBar.topItem.titleView=self.segment;
 }
 
 -(void)initTableView{
-    self.tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 120, UIScreenWidth, UIScreenHeight-self.segment.bottom) style:UITableViewStyleGrouped];
-    self.tableView.backgroundColor=self.view.backgroundColor;
+    self.tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, UIScreenWidth, UIScreenHeight) style:UITableViewStyleGrouped];
+//    self.tableView.backgroundColor=self.view.backgroundColor;
     self.tableView.delegate=self;
     self.tableView.dataSource=self;
     [self.view addSubview:self.tableView];
@@ -75,6 +69,12 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return 1;
 }
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 35;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 0.00001;
+}
 
 -(NSString* )tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
     if (section==0) {
@@ -90,7 +90,7 @@
     UITableViewCell* cell=[tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) {
         cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
-        UITextField* f=[UITextField new];
+        UITextView* f=[UITextView new];
         f.frame=cell.frame;
         [cell addSubview:f];
     }

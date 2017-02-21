@@ -24,6 +24,7 @@
 }
 
 -(void)configNavigationBar{
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     [[UINavigationBar appearance] setBarTintColor:ThemeColor];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     
