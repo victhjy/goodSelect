@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "GSSettingVC.h"
+
 @interface AppDelegate ()
 
 @end
@@ -18,7 +19,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    self.window.rootViewController=[[UINavigationController alloc]initWithRootViewController:[GSSettingVC new]];
+    self.window.rootViewController=[[UINavigationController alloc]initWithRootViewController:[[GSSettingVC alloc]init]];
     [self configNavigationBar];
     return YES;
 }

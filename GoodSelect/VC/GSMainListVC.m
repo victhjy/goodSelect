@@ -11,7 +11,6 @@
 
 #import "GSMainListVC.h"
 #import "YYCache.h"
-#import "GSListHeaderView.h"
 #import "UIScrollView+PullScale.h"
 @interface GSMainListVC ()<UITableViewDelegate,UITableViewDataSource,DZNEmptyDataSetSource,DZNEmptyDataSetDelegate>
 @property(nonatomic,strong)UITableView* tableView;
@@ -22,7 +21,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.title=@"😋😋😋";
     self.view.backgroundColor=[UIColor whiteColor];
     [self initTableView];
     [self initData];
@@ -30,17 +29,17 @@
     // Do any additional setup after loading the view.
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES];
-}
-
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:NO];
-}
+//- (void)viewWillAppear:(BOOL)animated
+//{
+//    [super viewWillAppear:animated];
+//    
+//    [self.navigationController setNavigationBarHidden:YES];
+//}
+//
+//-(void)viewWillDisappear:(BOOL)animated{
+//    [super viewWillDisappear:animated];
+//    [self.navigationController setNavigationBarHidden:NO];
+//}
 
 -(void)initData{
     self.dataList=[NSMutableArray new];
@@ -64,8 +63,8 @@
     self.tableView.emptyDataSetDelegate=self;
     [self.view addSubview:self.tableView];
     self.tableView.tableFooterView=[UIView new];
-    [self.tableView addPullScaleFuncInVC:self originalHeight:KHeaderHeight hasNavBar:(self.navigationController!=nil)];
-    self.tableView.imageV.image=[UIImage imageNamed:@"test"];
+//    [self.tableView addPullScaleFuncInVC:self originalHeight:KHeaderHeight hasNavBar:(self.navigationController!=nil)];
+//    self.tableView.imageV.image=[UIImage imageNamed:@"test"];
 }
 
 #pragma mark - UITabelView Delegate
@@ -118,9 +117,9 @@
     return animationx;
 }
 
-//-(BOOL)emptyDataSetShouldAnimateImageView:(UIScrollView *)scrollView{
-//    return YES;
-//}
+-(BOOL)emptyDataSetShouldAnimateImageView:(UIScrollView *)scrollView{
+    return YES;
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

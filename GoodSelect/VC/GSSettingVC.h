@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface GSSettingVC : UIViewController
+@interface GSSettingVC : UITableViewController
 
 @end

@@ -17,7 +17,8 @@
 #import "UIImageView+WebCache.h"
 #import "MyTools.h"
 #import "UIScrollView+EmptyDataSet.h"
-
+#import "YYKit.h"
+#import "IQKeyboardManager.h"
 //category  常用扩展类
 #import "NSString+MAC.h"
 
@@ -32,6 +33,8 @@
 #import "UINavigationBar+Awesome.h"
 #import "UINavigationController+FDFullscreenPopGesture.h"
 #import "UIImageHeader.h"
+
+#define WEAKSELF  __weak typeof(self) weakself=self
 
 #define ThemeColor [MyTools colorWithHexString:@"0xfed779"]    //254,215,121
 #define RGBA(r,g,b,a) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a]
