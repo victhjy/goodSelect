@@ -12,6 +12,9 @@
 #import "GSMainListVC.h"
 #import "YYCache.h"
 #import "UIScrollView+PullScale.h"
+#import "GSSelectModel.h"
+#import "GSHistoryCell.h"
+
 @interface GSMainListVC ()<UITableViewDelegate,UITableViewDataSource,DZNEmptyDataSetSource,DZNEmptyDataSetDelegate>
 @property(nonatomic,strong)UITableView* tableView;
 @property(nonatomic,strong)NSMutableArray* dataList;
@@ -43,13 +46,8 @@
 
 -(void)initData{
     self.dataList=[NSMutableArray new];
-    YYCache* cache=[[YYCache alloc]initWithName:TABLENAME];
-    if ([cache containsObjectForKey:KEY_LIST]) {
-        self.dataList=(NSMutableArray* ) [cache objectForKey:KEY_LIST];
-        if (self.dataList.count>0) {
-            [self.tableView reloadData];
-        }
-    };
+    self.dataList=[[LKDBHelper getUsingLKDBHelper] searchWithSQL:[NSString stringWithFormat:@"select * from %@",[GSSelectModel className]] toClass:[GSSelectModel class]];
+    
 }
 
 #pragma mark - initUI
@@ -78,14 +76,51 @@
 //    return 10;
 }
 
--(UITableViewCell* )tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell* cell=[tableView dequeueReusableCellWithIdentifier:@"cell"];
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    GSHistoryCell* cell=[tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) {
-        cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        cell=[[GSHistoryCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
-    cell.textLabel.text=[NSString stringWithFormat:@"%ld",indexPath.row+1];
+    GSSelectModel* model=self.dataList[indexPath.row];
+    cell.model=model;
+    CGFloat height=cell.cellHeight;
+    return height;
+}
+
+-(UITableViewCell* )tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    GSHistoryCell* cell=[tableView dequeueReusableCellWithIdentifier:@"cell"];
+    if (!cell) {
+        cell=[[GSHistoryCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+    }
+    cell.selectionStyle=UITableViewCellSelectionStyleNone;
+    GSSelectModel* model=self.dataList[indexPath.row];
+    cell.model=model;
     return cell;
 }
+
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+    __weak typeof(self) weakself=self;
+    GSSelectModel* selectModel=self.dataList[indexPath.row];
+    [[LKDBHelper getUsingLKDBHelper]deleteWithClass:[GSSelectModel class] where:[NSString stringWithFormat:@"createdID = '%@'",selectModel.createdID] callback:^(BOOL result) {
+        if (result) {
+            
+            }
+    }];
+    
+    [MyTools showText:[NSString stringWithFormat:@"删除记录%@成功",selectModel.createdID] inView:weakself.view];
+    [weakself.dataList removeObjectAtIndex:indexPath.row];
+    [weakself.tableView deleteRowAtIndexPath:indexPath withRowAnimation:UITableViewRowAnimationLeft];
+    [weakself.tableView reloadData];
+}
+
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
+    return YES;
+}
+
+-(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return UITableViewCellEditingStyleDelete;
+}
+
 
 #pragma mark - DZNEmpty
 

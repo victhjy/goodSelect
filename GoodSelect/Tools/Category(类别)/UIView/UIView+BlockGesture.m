@@ -21,6 +21,10 @@ static char kActionHandlerLongPressGestureKey;
         [self addGestureRecognizer:gesture];
         objc_setAssociatedObject(self, &kActionHandlerTapGestureKey, gesture, OBJC_ASSOCIATION_RETAIN);
     }
+    //tableView时取消对原有响应的覆盖
+    if ([self isKindOfClass:[UITableView class]]) {
+        gesture.cancelsTouchesInView=NO;
+    }
     objc_setAssociatedObject(self, &kActionHandlerTapBlockKey, block, OBJC_ASSOCIATION_COPY);
 }
 - (void)handleActionForTapGesture:(UITapGestureRecognizer*)gesture

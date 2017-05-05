@@ -195,4 +195,44 @@
     NSString* returnString=[stringFormatter stringFromDate:date];
     return returnString;
 }
+
+/**
+ *  nsdate转字符串
+ *
+ *  @param date 输入NSDate
+ *
+ *  @return NSString 2017-10-12 12:00
+ */
++(NSString* )dateStringYYYYMMDDFromNSDate:(NSDate* )date{
+    NSDateFormatter *stringFormatter = [[NSDateFormatter alloc] init] ;
+    [stringFormatter setDateFormat:@"YYYY-MM-dd HH:mm"];
+    NSString* returnString=[stringFormatter stringFromDate:date];
+    return returnString;
+}
+
++(void)showText:(NSString* )text inView:(UIView* )view{
+    MBProgressHUD *hud = [[MBProgressHUD alloc]initWithView:view];
+    [view addSubview:hud];
+    UIFont *font = [UIFont systemFontOfSize:16];
+    CGSize size;
+    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:font,NSFontAttributeName,nil];
+    CGSize maxSize = CGSizeMake(kScreenWidth - 80, MAXFLOAT);
+
+    size =  [text boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin attributes:dict context:nil].size;
+    
+    UILabel *customLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
+    customLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    customLabel.font = font;
+    customLabel.numberOfLines = 0;
+    customLabel.textColor = [UIColor appNavTitleColor];
+    customLabel.text = text;
+    hud.userInteractionEnabled = NO;
+    
+    hud.customView = customLabel;
+    hud.customView.centerY=UIScreenHeight*2/3;
+    hud.mode = MBProgressHUDModeCustomView;
+    [hud show:YES];
+    [hud hide:YES afterDelay:2];
+
+}
 @end

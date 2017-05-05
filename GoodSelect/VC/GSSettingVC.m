@@ -9,10 +9,14 @@
 #import "GSSettingVC.h"
 #import "GSMainListVC.h"
 #import "GSSettingCell.h"
+#import "GSTestCASjapeLayer.h"
+#import "GSGetResultVC.h"
+#import "GSSelectModel.h"
 
 @interface GSSettingVC ()<YYTextViewDelegate>
 {
     NSMutableArray* heightArr;
+    GSSelectModel* _gsModel;
 }
 @property(nonatomic,strong)UISegmentedControl* segment;
 @end
@@ -28,6 +32,7 @@
     [self initTableView];
     [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;
     heightArr=[@[@36,@36,@36] mutableCopy];
+    _gsModel=[GSSelectModel new];
     // Do any additional setup after loading the view.
 }
 
@@ -54,11 +59,12 @@
 -(void)initTableView{
     WEAKSELF;
     self.tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, UIScreenWidth, UIScreenHeight) style:UITableViewStyleGrouped];
-    self.tableView.userInteractionEnabled=YES;
-    [self.tableView.backgroundView addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
-        [weakself.view endEditing:YES];
-    }];
+    self.tableView.estimatedRowHeight = 36;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.tableFooterView=[self footerView];
+    [self.tableView addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
+        [weakself closeKeyboard];
+    }];
 }
 
 #pragma mark - switchedStatus
@@ -76,6 +82,7 @@
 -(void)rightItemClicked{
     GSMainListVC* listVC=[GSMainListVC new];
     [self.navigationController pushViewController:listVC animated:YES];
+    
 }
 
 -(UIView* )footerView{
@@ -92,8 +99,27 @@
     [b addTarget:self action:@selector(showResult) forControlEvents:UIControlEventTouchUpInside];
     b.center=bgView.center;
     [bgView addSubview:b];
-    
     return bgView;
+}
+
+-(void)showResult{
+//    GSTestCASjapeLayer* la=[GSTestCASjapeLayer new];
+//    [self.navigationController pushViewController:la animated:YES];
+    if (_gsModel.question.length==0 || _gsModel.h.length==0 || _gsModel.l.length==0) {
+        UIAlertController* alert=[UIAlertController alertControllerWithTitle:@"填完，傻逼" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* action1=[UIAlertAction actionWithTitle:@"😯" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            return ;
+        }];
+        [alert addAction:action1];
+        
+        [self.navigationController presentViewController:alert animated:YES completion:nil];
+    }
+    else{
+        GSGetResultVC* resultVC=[GSGetResultVC new];
+        resultVC.gsModel=_gsModel;
+        resultVC.title=_gsModel.question;
+        [self.navigationController pushViewController:resultVC animated:YES];
+    }
 }
 
 #pragma mark - UITabelView Delegate
@@ -116,7 +142,7 @@
     NSNumber* number=heightArr[indexPath.section];
     CGFloat f=[number floatValue];
     
-    return f;
+    return f<36?36:f;
 }
 
 -(NSString* )tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
@@ -168,35 +194,27 @@
     switch (textView.tag-1016) {
         case 0:
             heightArr[0]=[NSNumber numberWithFloat:[textView sizeThatFits:CGSizeMake(UIScreenWidth, CGFLOAT_MAX)].height];
-            textView.height=[textView sizeThatFits:CGSizeMake(UIScreenWidth, CGFLOAT_MAX)].height;
-            [UIView setAnimationsEnabled:NO];
-            [self.tableView beginUpdates];
-            [self.tableView endUpdates];
-            [UIView setAnimationsEnabled:YES];
-            [textView becomeFirstResponder];
+            _gsModel.question=textView.text;
             break;
         case 1:
             heightArr[1]=[NSNumber numberWithFloat:[textView sizeThatFits:CGSizeMake(UIScreenWidth, CGFLOAT_MAX)].height];
-            textView.height=[textView sizeThatFits:CGSizeMake(UIScreenWidth, CGFLOAT_MAX)].height;
-            [UIView setAnimationsEnabled:NO];
-            [self.tableView beginUpdates];
-            [self.tableView endUpdates];
-            [UIView setAnimationsEnabled:YES];
-            [textView becomeFirstResponder];
+            _gsModel.l=textView.text;
             break;
         case 2:
             heightArr[2]=[NSNumber numberWithFloat:[textView sizeThatFits:CGSizeMake(UIScreenWidth, CGFLOAT_MAX)].height];
-            textView.height=[textView sizeThatFits:CGSizeMake(UIScreenWidth, CGFLOAT_MAX)].height;
-            [UIView setAnimationsEnabled:NO];
-            [self.tableView beginUpdates];
-            [self.tableView endUpdates];
-            [UIView setAnimationsEnabled:YES];
-            [textView becomeFirstResponder];
+            _gsModel.h=textView.text;
             break;
-            
         default:
             break;
     }
+    textView.height=[textView sizeThatFits:CGSizeMake(UIScreenWidth, CGFLOAT_MAX)].height;
+    [UIView setAnimationsEnabled:NO];
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+    [UIView setAnimationsEnabled:YES];
+    [textView becomeFirstResponder];
+    
+
 }
 
 
