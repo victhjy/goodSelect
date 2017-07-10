@@ -12,6 +12,7 @@
 #import "GSTestCASjapeLayer.h"
 #import "GSGetResultVC.h"
 #import "GSSelectModel.h"
+#import "GSChoiceModel.h"
 
 @interface GSSettingVC ()<YYTextViewDelegate>
 {
@@ -19,6 +20,7 @@
     GSSelectModel* _gsModel;
 }
 @property(nonatomic,strong)UISegmentedControl* segment;
+@property(nonatomic, strong) NSMutableArray *listArr;
 @end
 
 @implementation GSSettingVC
@@ -31,9 +33,27 @@
     [self initUI];
     [self initTableView];
     [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;
-    heightArr=[@[@36,@36,@36] mutableCopy];
-    _gsModel=[GSSelectModel new];
+    
+    [self initData];
     // Do any additional setup after loading the view.
+}
+
+- (void)initData {
+    _gsModel=[GSSelectModel new];
+    self.listArr=[NSMutableArray new];
+    
+    GSChoiceModel* chancen=[GSChoiceModel new];
+    chancen.onwer=@"n";
+    
+    GSChoiceModel* chanceh=[GSChoiceModel new];
+    chanceh.onwer=@"h";
+    
+    GSChoiceModel* chancel=[GSChoiceModel new];
+    chancel.onwer=@"l";
+    
+    [self.listArr addObject:chancen];
+    [self.listArr addObject:chancel];
+    [self.listArr addObject:chanceh];
 }
 
 -(void)initUI{
@@ -103,8 +123,6 @@
 }
 
 -(void)showResult{
-//    GSTestCASjapeLayer* la=[GSTestCASjapeLayer new];
-//    [self.navigationController pushViewController:la animated:YES];
     if (_gsModel.question.length==0 || _gsModel.h.length==0 || _gsModel.l.length==0) {
         UIAlertController* alert=[UIAlertController alertControllerWithTitle:@"填完，傻逼" message:nil preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction* action1=[UIAlertAction actionWithTitle:@"😯" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -139,10 +157,9 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSNumber* number=heightArr[indexPath.section];
-    CGFloat f=[number floatValue];
-    
-    return f<36?36:f;
+    GSChoiceModel* model= self.listArr[indexPath.row];
+
+    return model.height;
 }
 
 -(NSString* )tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
@@ -164,59 +181,16 @@
         cell=[[GSSettingCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
         cell.selectionStyle=UITableViewCellSelectionStyleNone;
     }
-    cell.textView.delegate=self;
-    cell.textView.tag=1016+indexPath.section;
-    cell.textView.frame=cell.contentView.bounds;
-    switch (indexPath.section) {
-        case 0:
-            cell.textView.placeholderText=@"什么问题呢";
-            break;
-        case 1:
-            cell.textView.placeholderText=@"一般是对的";
-            break;
-        case 2:
-            cell.textView.placeholderText=@"一般是错的";
-            break;
-            
-        default:
-            break;
-    }
+    cell.tableView=tableView;
+    GSChoiceModel* model=self.listArr[indexPath.row];
+    [cell dataBind:model];
+
     return cell;
 }
 
 -(void)closeKeyboard{
     [self.view endEditing:YES];
 }
-
-#pragma mark - YYTextViewDelegate
-
--(void)textViewDidChange:(YYTextView *)textView{
-    switch (textView.tag-1016) {
-        case 0:
-            heightArr[0]=[NSNumber numberWithFloat:[textView sizeThatFits:CGSizeMake(UIScreenWidth, CGFLOAT_MAX)].height];
-            _gsModel.question=textView.text;
-            break;
-        case 1:
-            heightArr[1]=[NSNumber numberWithFloat:[textView sizeThatFits:CGSizeMake(UIScreenWidth, CGFLOAT_MAX)].height];
-            _gsModel.l=textView.text;
-            break;
-        case 2:
-            heightArr[2]=[NSNumber numberWithFloat:[textView sizeThatFits:CGSizeMake(UIScreenWidth, CGFLOAT_MAX)].height];
-            _gsModel.h=textView.text;
-            break;
-        default:
-            break;
-    }
-    textView.height=[textView sizeThatFits:CGSizeMake(UIScreenWidth, CGFLOAT_MAX)].height;
-    [UIView setAnimationsEnabled:NO];
-    [self.tableView beginUpdates];
-    [self.tableView endUpdates];
-    [UIView setAnimationsEnabled:YES];
-    [textView becomeFirstResponder];
-    
-
-}
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

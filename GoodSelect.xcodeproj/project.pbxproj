@@ -338,6 +338,7 @@
 		46AFBCEB1E5C1A3A0047512C /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 46AFBCEA1E5C1A3A0047512C /* libsqlite3.tbd */; };
 		46AFBCEE1E5C1A6F0047512C /* GSMainListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 46AFBCED1E5C1A6F0047512C /* GSMainListVC.m */; };
 		46AFBCFD1E5C33070047512C /* GSSettingVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 46AFBCFC1E5C33070047512C /* GSSettingVC.m */; };
+		5CDE04A11F131FD100EE019D /* GSChoiceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CDE04A01F131FD100EE019D /* GSChoiceModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1028,6 +1029,8 @@
 		46AFBCED1E5C1A6F0047512C /* GSMainListVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSMainListVC.m; sourceTree = "<group>"; };
 		46AFBCFB1E5C33070047512C /* GSSettingVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSSettingVC.h; sourceTree = "<group>"; };
 		46AFBCFC1E5C33070047512C /* GSSettingVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSSettingVC.m; sourceTree = "<group>"; };
+		5CDE049F1F131FD100EE019D /* GSChoiceModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSChoiceModel.h; sourceTree = "<group>"; };
+		5CDE04A01F131FD100EE019D /* GSChoiceModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSChoiceModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1811,6 +1814,8 @@
 			children = (
 				465CD9911E88F5B200F76981 /* GSSelectModel.h */,
 				465CD9921E88F5B200F76981 /* GSSelectModel.m */,
+				5CDE049F1F131FD100EE019D /* GSChoiceModel.h */,
+				5CDE04A01F131FD100EE019D /* GSChoiceModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2705,6 +2710,7 @@
 				464885D61E5D6B76001444AB /* YYKVStorage.m in Sources */,
 				4648864F1E5D81DF001444AB /* IQPreviousNextView.m in Sources */,
 				4655652C1E5C160500EAAE46 /* UIScrollView+PullScale.m in Sources */,
+				5CDE04A11F131FD100EE019D /* GSChoiceModel.m in Sources */,
 				46AFBC951E5C189F0047512C /* UINavigationItem+Lock.m in Sources */,
 				464885F71E5D6B76001444AB /* YYTextRunDelegate.m in Sources */,
 				465CD9931E88F5B200F76981 /* GSSelectModel.m in Sources */,

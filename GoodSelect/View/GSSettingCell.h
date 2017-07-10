@@ -7,10 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface GSSettingCell : UITableViewCell
+@class GSChoiceModel;
+@interface GSSettingCell : UITableViewCell <YYTextViewDelegate>
 
 @property(nonatomic,strong)YYTextView* textView;
+@property(nonatomic, weak) GSChoiceModel *model;
+@property(nonatomic, strong) UITableView *tableView;
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
+
+-(void)dataBind:(GSChoiceModel* )model;
 @end
